@@ -1,0 +1,9 @@
+services:
+  openresty:
+    build:
+      context: ./docker/openresty
+    volumes:
+      - ./docker/openresty/configs/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+      - ./docker/openresty/scripts:/scripts
+    ports:
+      - 80:80
