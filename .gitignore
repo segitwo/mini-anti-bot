@@ -1,0 +1,5 @@
+.clj-kondo/
+.cpcache/
+.dir-locals.el
+.lsp/
+docker/data

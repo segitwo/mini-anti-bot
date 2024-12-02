@@ -1,5 +1,6 @@
 services:
   openresty:
+    hostname: openresty
     build:
       context: ./docker/openresty
     volumes:
@@ -7,3 +8,20 @@ services:
       - ./docker/openresty/scripts:/scripts
     ports:
       - 80:80
+    networks:
+      - mini-antibot
+    depends_on:
+      -  redis
+  redis:
+    hostname: redis
+    image: redis:alpine
+    restart: always
+    volumes:
+      - ./docker/data/redis/:/data
+    ports:
+      - 6379:6379
+    networks:
+        - mini-antibot
+networks:
+  mini-antibot:
+    driver: bridge 
