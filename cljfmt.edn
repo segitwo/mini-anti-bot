@@ -1,0 +1,5 @@
+{:parallel? true
+ :paths [proj/src
+         proj/test
+         proj/project.clj]
+ :sort-ns-references true}

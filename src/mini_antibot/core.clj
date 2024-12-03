@@ -1,6 +1,11 @@
 (ns mini-antibot.core
   (:require [org.httpkit.server :refer [run-server]]
             [reitit.ring :as ring]
+            [reitit.coercion.schema]
+            [reitit.ring.coercion :refer [coerce-exceptions-middleware
+                                          coerce-request-middleware
+                                          coerce-response-middleware]]
+            [mini-antibot.routes :refer [ping-route auth-routes]]
             [muuntaja.core :as m]
             [reitit.ring.middleware.exception :refer [exception-middleware]]
             [reitit.ring.middleware.muuntaja :refer [format-request-middleware
@@ -13,15 +18,17 @@
   (ring/ring-handler
    (ring/router
     ["/api"
-     ["/ping" {:name ::ping
-               :get (fn [_]
-                      {:status 200
-                       :body {:hello "World"}})}]]
-    {:data {:muuntaja m/instance 
+     ping-route
+     auth-routes]
+    {:data {:coercion reitit.coercion.schema/coercion
+            :muuntaja m/instance
             :middleware [format-negotiate-middleware
                          format-response-middleware
                          exception-middleware
-                         format-request-middleware]}})))
+                         format-request-middleware
+                         coerce-exceptions-middleware
+                         coerce-request-middleware
+                         coerce-response-middleware]}})))
 
 (defn stop-server []
   (when-not (nil? @server)
