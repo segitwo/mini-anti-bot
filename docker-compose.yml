@@ -22,6 +22,20 @@ services:
       - 6379:6379
     networks:
         - mini-antibot
+  postgres:
+    hostname: postgres
+    image: postgres:14-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: mab
+      POSTGRES_PASSWORD: mab
+      POSTGRES_DB: mab
+    volumes:
+      - ./docker/data/postgres/:/var/lib/postgresql/data
+    networks:
+      - mini-antibot
 networks:
   mini-antibot:
     driver: bridge 

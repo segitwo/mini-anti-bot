@@ -3,3 +3,5 @@
 .dir-locals.el
 .lsp/
 docker/data
+.nrepl-port
+.#*

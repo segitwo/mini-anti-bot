@@ -1,4 +1,5 @@
 (ns mini-antibot.core
+  (:gen-class)
   (:require [org.httpkit.server :refer [run-server]]
             [reitit.ring :as ring]
             [reitit.coercion.schema]
