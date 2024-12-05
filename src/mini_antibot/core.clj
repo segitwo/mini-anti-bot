@@ -5,7 +5,7 @@
             [reitit.ring.coercion :refer [coerce-exceptions-middleware
                                           coerce-request-middleware
                                           coerce-response-middleware]]
-            [mini-antibot.routes :refer [ping-route auth-routes]]
+            [mini-antibot.routes :refer [auth-routes]]
             [muuntaja.core :as m]
             [reitit.ring.middleware.exception :refer [exception-middleware]]
             [reitit.ring.middleware.muuntaja :refer [format-request-middleware
@@ -18,7 +18,6 @@
   (ring/ring-handler
    (ring/router
     ["/api"
-     ping-route
      auth-routes]
     {:data {:coercion reitit.coercion.schema/coercion
             :muuntaja m/instance

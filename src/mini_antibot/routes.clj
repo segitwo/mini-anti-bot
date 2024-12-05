@@ -1,23 +1,17 @@
 (ns mini-antibot.routes
   (:require [mini-antibot.handlers :as handle]
-            [schema.core :as s]))
-
-(defn dummy-handler [{:keys [parameters]}]
-  {:status 200
-   :body parameters})
-
-(def ping-route
-  ["/ping" {:name ::ping
-            :get #'handle/ping}])
-
+            [schema.core :as s]
+            [mini-antibot.utils :refer [wrap-jwt-authentication auth-middleware]]))
+ 
 (def auth-routes
-  [["/users" {:get handle/ping}]
+  [["/users" {:get {:middleware [wrap-jwt-authentication]
+                    :handler #'handle/get-all-users}}]
 
    ["/login" {:post {:parameters {:body {:username s/Str
-                                          :password s/Str}}
-                      :handler dummy-handler}}]
+                                         :password s/Str}}
+                     :handler #'handle/login}}]
 
    ["/register" {:post {:parameters {:body {:username s/Str
                                             :password s/Str
                                             :email s/Str}}
-                        :handler dummy-handler}}]])
+                        :handler #'handle/register}}]])
