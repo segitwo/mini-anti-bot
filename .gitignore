@@ -5,3 +5,6 @@
 docker/data
 .nrepl-port
 .#*
+node_modules
+.shadow-cljs
+resources/public/js/*

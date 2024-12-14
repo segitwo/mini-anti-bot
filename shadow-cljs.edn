@@ -1,0 +1,7 @@
+{:deps {:aliases [:cljs]}
+ :builds {:app {:target :browser
+                :output-dir "resources/public/js"
+                :assets-path "/js"
+                :modules {:main {:init-fn mini-antibot.core/init}}}}
+ :dev-http {5003 "resources/public"}
+ :nrepl {:port 7002}}

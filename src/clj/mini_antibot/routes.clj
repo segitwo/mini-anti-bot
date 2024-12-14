@@ -4,7 +4,7 @@
             [mini-antibot.utils :refer [wrap-jwt-authentication auth-middleware]]))
  
 (def auth-routes
-  [["/users" {:get {:middleware [wrap-jwt-authentication]
+  [["/users" {:get {:middleware [wrap-jwt-authentication auth-middleware]
                     :handler #'handle/get-all-users}}]
 
    ["/login" {:post {:parameters {:body {:username s/Str
