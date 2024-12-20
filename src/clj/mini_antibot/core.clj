@@ -2,33 +2,23 @@
   (:gen-class)
   (:require [org.httpkit.server :refer [run-server]]
             [reitit.ring :as ring]
-            [reitit.coercion.schema]
-            [reitit.ring.coercion :refer [coerce-exceptions-middleware
-                                          coerce-request-middleware
-                                          coerce-response-middleware]]
-            [mini-antibot.routes :refer [auth-routes]]
-            [muuntaja.core :as m]
-            [reitit.ring.middleware.exception :refer [exception-middleware]]
-            [reitit.ring.middleware.muuntaja :refer [format-request-middleware
-                                                     format-response-middleware
-                                                     format-negotiate-middleware]]))
+            [reitit.core :as r]
+            [ring.middleware.resource :refer [wrap-resource]]
+            [mini-antibot.routes :refer [auth-routes site-routes]]
+            ))
 
 (defonce server (atom nil))
 
 (def app
   (ring/ring-handler
    (ring/router
-    ["/api"
-     auth-routes]
-    {:data {:coercion reitit.coercion.schema/coercion
-            :muuntaja m/instance
-            :middleware [format-negotiate-middleware
-                         format-response-middleware
-                         exception-middleware
-                         format-request-middleware
-                         coerce-exceptions-middleware
-                         coerce-request-middleware
-                         coerce-response-middleware]}})))
+    [auth-routes site-routes])
+   (ring/routes
+    (wrap-resource (constantly {:status 404 :body "Not found"}) "public")
+    (ring/create-default-handler))))
+
+(comment
+  (-> app (ring/get-router) (r/compiled-routes)))
 
 (defn stop-server []
   (when-not (nil? @server)

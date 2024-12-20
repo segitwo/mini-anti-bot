@@ -1,31 +1,24 @@
 (ns mini-antibot.core
-  (:require [mini-antibot.components.site.header :refer [header-component]]
-            [mini-antibot.components.site.home :refer [home-component]]
-            [mini-antibot.components.site.login :refer [login-component]]
-            [mini-antibot.router :refer [route]]
-            [secretary.core :as secretary :refer-macros [defroute]]
+  (:require 
+            ;; [secretary.core :as secretary :refer-macros [defroute]]
             [reagent.core :as r]
-            [reagent.session :as rs]
+            ;; [reagent.session :as rs]
             [reagent.dom :as rd]))
-(secretary/set-config! :prefix "#")
+;; (secretary/set-config! :prefix "#")
 
-(defroute "/" []
-   (rs/put! :current-page #'home-component))
+#_(defroute "/" []
+   (rs/put! :current-page #'login))
 
-(defn main-compponent []
+(defn main []
   [:<>
-   [header-component]
-   [(cond
-       (= @route "home") home-component
-       (= @route "login") login-component)]])
+    [:div "hello world"]])
 
 (defn ^:export init []
-  (rd/render [#'main-compponent]
-                      (js/document.getElementById "app")))
+  (rd/render [#'main]
+             (.getElementById js/document "app")))
 
 (defn ^:dev/after-load re-render []
   (init))
 
 (comment
-  (reset! route "home")
-  (reset! route "login"))
+  )

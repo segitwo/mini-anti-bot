@@ -37,11 +37,11 @@
         sanitazed-user (dissoc user :password)]
     sanitazed-user))
 
-(defn get-user [{:keys [username password]}]
+(defn get-user [{:keys [email password]}]
   (let [user (->
               (hh/select :*)
               (hh/from :users)
-              (hh/where [:= :username username])
+              (hh/where [:= :email email])
               (h/format)
               (db-query-one))
         sanitized-user (dissoc user :password)]
