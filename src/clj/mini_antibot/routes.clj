@@ -4,6 +4,7 @@
             [muuntaja.core :as m]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]]
             [ring.middleware.multipart-params :refer [wrap-multipart-params]]
+            [ring.middleware.cookies :refer [wrap-cookies]]
             [reitit.coercion.schema]
             [reitit.ring.coercion :refer [coerce-exceptions-middleware
                                           coerce-request-middleware
@@ -43,5 +44,8 @@
    ["/register" {:post {:parameters {:body {:username s/Str
                                             :password s/Str
                                             :email s/Str}}
-                        :handler #'handle/register}}]])
+                        :handler #'handle/register}}]
+
+   ["/dashboard" {:get {:middleware [wrap-cookies]
+                        :handler #'handle/dashboard}}]])
 

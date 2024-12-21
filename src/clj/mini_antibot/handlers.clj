@@ -1,8 +1,9 @@
 (ns mini-antibot.handlers
   (:require [mini-antibot.db :as db]
-            [mini-antibot.utils :refer [create-token]]
+            [mini-antibot.utils :refer [create-token unsign-token]]
             [mini-antibot.pages.home-page :refer [home-page]]
             [mini-antibot.pages.login-page :refer [login-page]]
+            [mini-antibot.pages.dashboard-page :refer [dashboard-page]]
             [mini-antibot.pages.layouts :refer [main-layout without-header-layout]]
             [hiccup2.core :as hc]))
 
@@ -25,7 +26,7 @@
       {:status 404
        :body {:error "Invalid credentials"}}
       {:status 301
-       :headers {"Location" "/"
+       :headers {"Location" "/dashboard"
                  "Set-Cookie" (str "token=" (create-token user) "; Path=/; httpOnly")}
        })))
 ;; Site
@@ -44,3 +45,22 @@
              (main-layout)
              (hc/raw)
              (str))})
+
+(defn dashboard [request]
+  (let [token (:value (get-in request [:cookies "token"]))
+        redirect-header {"Location" "/login"}]
+    (if (nil? token)
+      {:status 301 
+       :headers redirect-header}
+      (let [token-user (unsign-token token)
+            user (db/get-user-by-email token-user)]
+        (if (nil? user)
+          {:status 301
+           :headers redirect-header}
+          {:status 200
+           :body (-> (dashboard-page)
+                     (hc/raw)
+                     (str))})))))
+
+(comment
+  (db/get-user (unsign-token "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ1c2VybmFtZSIsImVtYWlsIjoidXNlckBlbWFpbC5jb20ifQ.fNVPGg26Cd7FPu8ycgFYMiQTnYd3J6zLTIVxhi8-uCM")))

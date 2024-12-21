@@ -49,6 +49,18 @@
       sanitized-user
       nil)))
 
+(defn get-user-by-email [{:keys [email]}]
+  (let [user (->
+              (hh/select :*)
+              (hh/from :users)
+              (hh/where [:= :email email])
+              (h/format)
+              (db-query-one))]
+    (if (nil? user) nil user)))
+
+(comment
+  (get-user-by-email {:email "user@email.com" :username "username"}))
+
 (defn get-all-users []
   (let [users (->
                (hh/select :*)
