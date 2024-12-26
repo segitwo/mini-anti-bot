@@ -14,6 +14,10 @@
 (s/def ::ip (s/and string? #(re-matches ipv4-regex %)))
 (s/def ::domain #(re-matches domain-regex %))
 
+(comment
+  (s/valid? ::domain "www.acme.com"))
+
+
 (defn valid-ip? [ip]
   (s/valid? ::ip ip))
 
@@ -34,7 +38,7 @@
 
           (print token)
           (prn (:status response))))
-    (reset! api-client-error {:ip-error "Некорректный IP адрес"})))
+    (reset! api-client-error {:ip "Некорректный IP адрес"})))
 
 (def errors-text {:ip "Некорректный IP адрес"
                   :domain "Некорректное доменое имя"})
@@ -56,5 +60,7 @@
   (reset! api-client-error {})
   (validate-domain-ip! {:ip "127.0.0.1" :domain ""}))
 
-(defn add-domain [data])
+(defn add-domain [data]
+  (when (validate-domain-ip! @data)
+    (prn "connect to server")))
 

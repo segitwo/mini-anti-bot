@@ -16,7 +16,7 @@
              :on-change #(reset! value (-> % .-target .-value))
              :on-click #(reset! api-client-error {})}]
     [:label {:for "ip-address" :class "absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"} "127.0.0.1"]]
-   [:p {:id "outlined_error_help" :class "mx-2 mt-1 text-xs text-red-600 dark:text-red-400"} (when (not-empty @api-client-error) (:ip-error @api-client-error))]])
+   [:p {:id "outlined_error_help" :class "mx-2 mt-1 text-xs text-red-600 dark:text-red-400"} (when (not-empty @api-client-error) (:ip @api-client-error))]])
 
 (defn manual-block []
   [:<>
