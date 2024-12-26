@@ -22,16 +22,35 @@
                         exception-middleware
                         format-request-middleware]}
 
-   ["/users" {:get {;; :coercion reitit.coercion.schema/coercion
-                    :middleware [                                 wrap-jwt-authentication auth-middleware]
+   ["/users" {:get {:middleware [wrap-jwt-authentication auth-middleware]
+                    :handler #'handle/get-all-users}}]
 
-                    :handler #'handle/get-all-users}}]])
+   ;;TODO: Вынести coerce, jwt
+   ["/add-ip" {:post {:coercion reitit.coercion.schema/coercion
+                      :parameters {:body {:ip s/Str}}
+                      :middleware [wrap-jwt-authentication
+                                   auth-middleware
+                                   coerce-exceptions-middleware
+                                   coerce-request-middleware
+                                   coerce-response-middleware]
+                      :handler #'handle/add-ip}}]
+
+   ["/add-domain" {:post {:coercion reitit.coercion.schema/coercion
+                          :parameters {:body {:domain s/Str
+                                              :ip s/Str}}
+                          :middleware [wrap-jwt-authentication
+                                       auth-middleware
+                                       coerce-exceptions-middleware
+                                       coerce-request-middleware
+                                       coerce-response-middleware]
+                          :handler {:status 200
+                                    :body "Add domain"}}}]])
 
 (def site-routes
   [["/" {:get {:handler #'handle/home}}]
    ["/login" {:post {;; :coercion reitit.coercion.schema/coercion
                      ;; :parameters {:body {:username s/Str
-                     ;;                          :password s/Str}}
+                     ;;                     :password s/Str}}
                      :middleware [wrap-multipart-params
                                   wrap-keyword-params
                                   #_coerce-exceptions-middleware
@@ -40,6 +59,8 @@
 
                      :handler #'handle/login}
               :get {:handler #'handle/login-form}}]
+
+   ["/logout" {:get {:handler #'handle/logout}}]
 
    ["/register" {:post {:parameters {:body {:username s/Str
                                             :password s/Str

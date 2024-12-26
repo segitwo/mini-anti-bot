@@ -11,9 +11,10 @@
   "description": "",
   "devDependencies": {
     "shadow-cljs": "^2.28.20",
-    "tailwindcss": "^3.4.16"
+    "tailwindcss": "3.4.16"
   },
   "dependencies": {
+    "js-beautify": "^1.15.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   }
