@@ -9,7 +9,7 @@
 
 (def ipv4-regex #"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$")
 
-(def domain-regex #"^(?=.{1,253}$)((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,6}$")
+(def domain-regex #"[-a-zA-Z0-9@:%_\+.~#?&\/=]{2,256}\.[a-z]{2,4}")
 
 (s/def ::ip (s/and string? #(re-matches ipv4-regex %)))
 (s/def ::domain #(re-matches domain-regex %))
